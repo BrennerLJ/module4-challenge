@@ -1,39 +1,118 @@
-var finalScore = 0;
-var quiz = document.querySelector("#quiz");
-var quizContent = document.querySelector("#quiz-content");
-var questionTitle = document.querySelector("#qtitle");
-var timer = document.querySelector("#timer");
-var startButton = document.querySelector("#start");
-
-var questions = [
+const quizQuestions = [
     {
-        title: "Arrays in JavaScript can be used to store: ",
-        options: ["numbers and strings", "other arrays", "booleans", "all of the above"],
-        answer: "all of the above"
+        question: "The first index of an array is:",
+        options: [
+            "0", 
+            "1",
+            "2",
+            "Whatever you want"],
+        correctAnswer: "0"
     },
     {
-        title: "Checks for certain conditions, then repeatedly excutes a block of code as long as those conditions are met",
-        options: ["if / else statement", "for loop", "function", "all of the above"],
-        answer: "for loop"
+        question: "What is the boolean output of the following statement?: 'five' === 5",
+        options: [
+            "0",
+            "undefined",
+            "true",
+            "false"],
+        correctAnswer: "false"
     },
     {
-        title: "The condition in an if / else statement is enclosed with: ",
-        options: ["parenthesis", "quotes", "curly brackets", "square brackets"],
-        answer: "parenthesis"
+        question: "Which of the following HTML tags would result in bold text?",
+        options: [
+            "<bold>",
+            "<em>",
+            "<br>",
+            "<strong>"],
+        correctAnswer: "<strong>"
     },
     {
-        title: "String values must be enclosed within ____ when being assigned to variables.",
-        options: ["curly brackets", "commas", "parenthesis", "quotes"],
-        answer: "quotes"
+        question: "Which CSS property controls text size?",
+        options: [
+            "font-size",
+            "text-size",
+            "font-style",
+            "size"],
+        correctAnswer: "font-size"
     },
     {
-        title: "A very useful tool during development and debugging for printing content to the debugger is: "
-        options: ["terminal/git", "JavaScript", "console.log", "for loops"],
-        answer: "console.log"
+        question: "How do you add a comment in a JavaScript file?",
+        options: [
+            "< !-- Comment -->",
+            "//Comment",
+            "/*Comment*/",
+            "~Comment~"],
+        correctAnswer: "//Comment"
     }
-    {
-        title:
-        options:
-        answer:
-    }
+    // Add more questions as needed
 ];
+
+let currentQuestion = 0;
+let score = 0;
+
+function displayQuestion() {
+    // Display the current question and options in the #quiz-container
+    const quizContainer = document.getElementById("quiz-container");
+    const questionData = quizQuestions[currentQuestion];
+
+    quizContainer.innerHTML = "";
+
+    const questionElement = document.createElement("h2");
+    questionElement.textContent = questionData.question;
+    quizContainer.appendChild(questionElement);
+
+    questionData.options.forEach((option, index) => {
+        const optionElement = document.createElement("button");
+        optionElement.textContent = option;
+        optionElement.addEventListener("click", () => checkAnswer(option));
+        quizContainer.appendChild(optionElement);
+        
+    });
+}
+
+function checkAnswer(selectedOption) {
+    const correctAnswer = quizQuestions[currentQuestion].correctAnswer;
+
+    if (selectedOption === correctAnswer) {
+        score++;
+    }
+
+    currentQuestion++;
+
+    if (currentQuestion < quizQuestions.length) {
+        displayQuestion();
+    } else {
+        displayResult();
+    }
+}
+
+function displayResult() {
+    const quizContainer = document.getElementById("quiz-container");
+    const resultElement = document.createElement("div");
+
+    resultElement.innerHTML = `<h2>Quiz Finished!</h2><p>Your Score: ${score}/${quizQuestions.length}</p>`;
+    quizContainer.innerHTML = '';
+    quizContainer.appendChild(resultElement);
+
+}
+
+function submitQuiz() {
+    const selectedOption = document.querySelector('button.selected');
+
+    if (selectedOption) {
+        const userAnswer = selectedOption.textContent;
+        checkAnswer(userAnswer);
+    }
+
+    if(currentQuestion < quizQuestions.length - 1) {
+        currentQuestion++;
+        displayQuestion();
+    } else {
+        displayResult();
+    }
+}
+
+// Call displayQuestion() to start the quiz
+displayQuestion();
+
+
