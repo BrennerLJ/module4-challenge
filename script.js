@@ -68,6 +68,8 @@ const quizQuestions = [
 let currentQuestion = 0;
 let score = 0;
 let saveScoreClicked = false;
+let timer;
+let timeRemaining = 60;
 
 function displayQuestion() {
     // Display the current question and options in the #quiz-container
@@ -87,6 +89,19 @@ function displayQuestion() {
         quizContainer.appendChild(optionElement);
         
     });
+
+    startTimer();
+}
+
+function startTimer() {
+    timer = setInterval(function () {
+        document.getElementById('timer').textContent = `Time Remaining: ${timeRemaining}s`;
+        timeRemaining--;
+
+        if (timeRemaining < 0) {
+            clearInterval(timer);
+        }
+    }, 1000);
 }
 
 function checkAnswer(selectedOption) {
@@ -101,6 +116,7 @@ function checkAnswer(selectedOption) {
         const resultElement = document.createElement("div");
         resultElement.innerHTML = `
         <p>Wrong!</p>`;
+        score--;
     }
 
     currentQuestion++;
